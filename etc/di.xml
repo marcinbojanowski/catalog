@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="MB\Catalog\Api\Data\MessageInterface" type="MB\Catalog\MessageQueue\Message"/>
+    <preference for="MB\Catalog\Api\Data\ProductInterface" type="MB\Catalog\Model\Product"/>
+    <preference for="MB\Catalog\Api\Data\ProductSearchResultsInterface" type="MB\Catalog\Model\ProductSearchResults"/>
+    <preference for="MB\Catalog\Api\AsyncUpdateInterface" type="MB\Catalog\Model\AsyncUpdate"/>
+    <preference for="MB\Catalog\Api\ProductManagementInterface" type="MB\Catalog\Model\ProductManagement"/>
+    <preference for="MB\Catalog\Api\ProductRepositoryInterface" type="MB\Catalog\Model\ProductRepository"/>
+    <preference for="MB\Catalog\Api\PublisherInterface" type="MB\Catalog\MessageQueue\Publisher"/>
+    <virtualType name="MB\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ProductFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
+        <arguments>
+            <argument name="customFilters" xsi:type="array">
+                <item name="store_id" xsi:type="object">MB\Catalog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\StoreFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MB\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filters" xsi:type="object">MB\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ProductFilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="MB\Catalog\Model\ProductRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">MB\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor</argument>
+        </arguments>
+    </type>
+    <virtualType name="MBCatalogAsyncLoggerHandler" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/custom_catalog.log</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MBCatalogAsyncLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="critical" xsi:type="object">MBCatalogAsyncLoggerHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="MB\Catalog\MessageQueue\Handler">
+        <arguments>
+            <argument name="logger" xsi:type="object">MBCatalogAsyncLogger</argument>
+        </arguments>
+    </type>
+</config>

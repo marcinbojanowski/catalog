@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">mb_catalog_product_form.mb_catalog_product_form_data_source</item>
+        </item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <label translate="true">Custom Catalog</label>
+        <dataScope>data</dataScope>
+        <namespace>mb_catalog_product_form</namespace>
+        <deps>
+            <dep>mb_catalog_product_form.mb_catalog_product_form_data_source</dep>
+        </deps>
+        <buttons>
+            <button name="back">
+                <url path="*/*/index"/>
+                <class>back</class>
+                <label translate="true">Back</label>
+            </button>
+            <button name="save" class="MB\Catalog\Ui\Component\Control\Product\SaveSplitButton"/>
+            <button name="delete" class="MB\Catalog\Ui\Component\Control\Product\DeleteButton"/>
+        </buttons>submit_url
+    </settings>
+    <dataSource name="mb_catalog_product_form_data_source" component="Magento_Ui/js/form/provider">
+        <settings>
+            <submitUrl path="*/*/save"/>
+        </settings>
+        <dataProvider class="MB\Catalog\Ui\DataProvider\ProductDataProvider" name="mb_catalog_product_form_data_source">
+            <settings>
+                <requestFieldName>entity_id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="general" sortOrder="10">
+        <settings>
+            <label translate="true">Product Information</label>
+            <collapsible>false</collapsible>
+        </settings>
+        <field name="product_id" formElement="input" sortOrder="10">
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <scopeLabel>[Global]</scopeLabel>
+                <label translate="true">Product Id</label>
+            </settings>
+        </field>
+        <field name="sku" formElement="input" sortOrder="20">
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <scopeLabel>[Global]</scopeLabel>
+                <label translate="true">SKU</label>
+            </settings>
+        </field>
+        <field name="vpn" formElement="input" sortOrder="30">
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <scopeLabel>[Global]</scopeLabel>
+                <label translate="true">VPN</label>
+            </settings>
+        </field>
+        <field name="copy_write_info" formElement="textarea" sortOrder="40">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Copy Write Info</label>
+                <scopeLabel>[Store]</scopeLabel>
+            </settings>
+        </field>
+    </fieldset>
+</form>
